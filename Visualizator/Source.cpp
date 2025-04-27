@@ -161,6 +161,10 @@ std::vector<SDL_Rect> makeRectsFromData() {
 	return data;
 }
 
+bool inArea(int x, int y, SDL_Rect area) {
+	return x >= area.x && y >= area.y && x < area.x + area.w && y < area.y + area.h;
+}
+
 int main(int argc, char* argv[]) {
 	SDL_Window* window = nullptr;
 	SDL_Renderer* renderer = nullptr;
@@ -232,9 +236,12 @@ int main(int argc, char* argv[]) {
 				running = false;
 				break;
 			case SDL_MOUSEBUTTONDOWN:
-				selsort(renderer, data);
-				renderGraph(renderer, data, -1, -1, -1);
-				SDL_RenderPresent(renderer);
+				if (inArea(event.button.x, event.button.y, button)) {
+					selsort(renderer, data);
+					renderGraph(renderer, data, -1, -1, -1);
+				}
+				
+				//SDL_RenderPresent(renderer);
 #if 0
 				for (int i = 0; i < data.size(); ++i) {
 					SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
